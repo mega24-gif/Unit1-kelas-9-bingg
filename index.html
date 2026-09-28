@@ -1,0 +1,1731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAUNA EXPLORER: Exploring the Amazing Fauna of Indonesia</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        jungle: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        },
+                        earth: {
+                            100: '#fef3c7',
+                            500: '#f59e0b',
+                            700: '#b45309',
+                            800: '#78350f',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f4f7f5;
+        }
+
+        .active-tab {
+            background-color: #15803d !important;
+            color: #ffffff !important;
+            font-weight: 600;
+        }
+
+        .hotspot-pulse {
+            animation: pulse-animation 2s infinite;
+        }
+
+        @keyframes pulse-animation {
+            0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+            70% { box-shadow: 0 0 0 12px rgba(34, 197, 94, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+        }
+
+        .badge-card {
+            transition: transform 0.2s ease-in-out;
+        }
+        .badge-card:hover {
+            transform: translateY(-4px);
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #15803d;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen flex flex-col justify-between">
+
+    <!-- Top Navigation Header -->
+    <header class="bg-jungle-800 text-white sticky top-0 z-40 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <!-- Brand Logo -->
+            <div class="flex items-center gap-3 cursor-pointer" onclick="navigateTo('home')">
+                <div class="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center text-xl font-extrabold shadow-inner">
+                    🦧
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-lg leading-tight tracking-wide">FAUNA EXPLORER</h1>
+                    <p class="text-xs text-emerald-200">Grade 9 English Learning Platform</p>
+                </div>
+            </div>
+
+            <!-- Student Profile Summary / XP -->
+            <div class="flex items-center gap-4">
+                <div class="hidden sm:flex items-center bg-jungle-900/60 px-3 py-1.5 rounded-full border border-jungle-700">
+                    <span id="nav-student-name" class="text-sm font-semibold text-emerald-100 mr-2">Guest Student</span>
+                    <span id="nav-xp-badge" class="bg-amber-500 text-amber-950 font-bold text-xs px-2.5 py-0.5 rounded-full flex items-center gap-1">
+                        <i class="fa-solid fa-bolt text-amber-900"></i> <span id="user-xp-display">0</span> XP
+                    </span>
+                </div>
+                <button onclick="openConfigModal()" class="text-xs bg-jungle-700 hover:bg-jungle-600 px-3 py-1.5 rounded-lg border border-jungle-600 transition flex items-center gap-1">
+                    <i class="fa-solid fa-gear"></i> <span class="hidden md:inline">Teacher Config</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 w-full flex-grow flex flex-col md:flex-row gap-6 py-6">
+        
+        <!-- Sidebar Navigation (Desktop) -->
+        <aside class="hidden md:block w-64 bg-white rounded-2xl p-4 shadow-sm border border-slate-200 shrink-0 self-start sticky top-20">
+            <div class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 px-3">Navigation</div>
+            <nav class="space-y-1 text-sm font-medium">
+                <button onclick="navigateTo('home')" id="nav-home" class="nav-link w-full text-left px-3 py-2.5 rounded-xl flex items-center gap-3 text-slate-600 hover:bg-emerald-50 transition active-tab">
+                    <i class="fa-solid fa-house text-emerald-600 w-5"></i> Home
+                </button>
+                <button onclick="navigateTo('objectives')" id="nav-objectives" class="nav-link w-full text-left px-3 py-2.5 rounded-xl flex items-center gap-3 text-slate-600 hover:bg-emerald-50 transition">
+                    <i class="fa-solid fa-bullseye text-emerald-600 w-5"></i> Objectives
+                </button>
+                
+                <div class="pt-2 pb-1 text-xs font-bold text-slate-400 uppercase tracking-wider px-3">Fauna Topics</div>
+                <button onclick="navigateTo('bekantan')" id="nav-bekantan" class="nav-link w-full text-left px-3 py-2 rounded-xl flex items-center gap-3 text-slate-600 hover:bg-emerald-50 transition">
+                    🐒 Bekantan
+                </button>
+                <button onclick="navigateTo('orangutan')" id="nav-orangutan" class="nav-link w-full text-left px-3 py-2 rounded-xl flex items-center gap-3 text-slate-600 hover:bg-emerald-50 transition">
+                    🦧 Orangutan
+                </button>
+                <button onclick="navigateTo('birds')" id="nav-birds" class="nav-link w-full text-left px-3 py-2 rounded-xl flex items-center gap-3 text-slate-600 hover:bg-emerald-50 transition">
+                    🐦 Indonesian Birds
+                </button>
+
+                <div class="pt-2 pb-1 text-xs font-bold text-slate-400 uppercase tracking-wider px-3">Language Skills</div>
+                <button onclick="navigateTo('vocabulary')" id="nav-vocabulary" class="nav-link w-full text-left px-3 py-2 rounded-xl flex items-center gap-3 text-slate-600 hover:bg-emerald-50 transition">
+                    <i class="fa-solid fa-book text-emerald-600 w-5"></i> Vocabulary
+                </button>
+                <button onclick="navigateTo('reading')" id="nav-reading" class="nav-link w-full text-left px-3 py-2 rounded-xl flex items-center gap-3 text-slate-600 hover:bg-emerald-50 transition">
+                    <i class="fa-solid fa-book-open text-emerald-600 w-5"></i> Reading
+                </button>
+                <button onclick="navigateTo('grammar')" id="nav-grammar" class="nav-link w-full text-left px-3 py-2 rounded-xl flex items-center gap-3 text-slate-600 hover:bg-emerald-50 transition">
+                    <i class="fa-solid fa-pen-ruler text-emerald-600 w-5"></i> Grammar
+                </button>
+                <button onclick="navigateTo('listening')" id="nav-listening" class="nav-link w-full text-left px-3 py-2 rounded-xl flex items-center gap-3 text-slate-600 hover:bg-emerald-50 transition">
+                    <i class="fa-solid fa-headphones text-emerald-600 w-5"></i> Listening
+                </button>
+                <button onclick="navigateTo('speaking')" id="nav-speaking" class="nav-link w-full text-left px-3 py-2 rounded-xl flex items-center gap-3 text-slate-600 hover:bg-emerald-50 transition">
+                    <i class="fa-solid fa-microphone text-emerald-600 w-5"></i> Speaking
+                </button>
+                <button onclick="navigateTo('writing')" id="nav-writing" class="nav-link w-full text-left px-3 py-2 rounded-xl flex items-center gap-3 text-slate-600 hover:bg-emerald-50 transition">
+                    <i class="fa-solid fa-file-pen text-emerald-600 w-5"></i> Writing
+                </button>
+
+                <div class="pt-2 pb-1 text-xs font-bold text-slate-400 uppercase tracking-wider px-3">Activities & Assessment</div>
+                <button onclick="navigateTo('games')" id="nav-games" class="nav-link w-full text-left px-3 py-2 rounded-xl flex items-center gap-3 text-slate-600 hover:bg-emerald-50 transition">
+                    <i class="fa-solid fa-gamepad text-emerald-600 w-5"></i> Interactive Games
+                </button>
+                <button onclick="navigateTo('conservation')" id="nav-conservation" class="nav-link w-full text-left px-3 py-2 rounded-xl flex items-center gap-3 text-slate-600 hover:bg-emerald-50 transition">
+                    <i class="fa-solid fa-leaf text-emerald-600 w-5"></i> Conservation
+                </button>
+                <button onclick="navigateTo('quiz')" id="nav-quiz" class="nav-link w-full text-left px-3 py-2 rounded-xl flex items-center gap-3 text-slate-600 hover:bg-emerald-50 transition">
+                    <i class="fa-solid fa-circle-question text-emerald-600 w-5"></i> Final Quiz
+                </button>
+                <button onclick="navigateTo('progress')" id="nav-progress" class="nav-link w-full text-left px-3 py-2 rounded-xl flex items-center gap-3 text-slate-600 hover:bg-emerald-50 transition">
+                    <i class="fa-solid fa-trophy text-amber-500 w-5"></i> My Progress
+                </button>
+                <button onclick="navigateTo('teacher')" id="nav-teacher" class="nav-link w-full text-left px-3 py-2 rounded-xl flex items-center gap-3 text-slate-600 hover:bg-emerald-50 transition">
+                    <i class="fa-solid fa-chart-line text-blue-600 w-5"></i> Teacher Dashboard
+                </button>
+            </nav>
+        </aside>
+
+        <!-- Main Dynamic View Container -->
+        <main class="flex-1 bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-200 overflow-hidden min-h-[600px]">
+
+            <section id="page-home" class="page-content space-y-6">
+                <div class="relative bg-gradient-to-r from-jungle-800 to-jungle-900 rounded-2xl p-6 sm:p-10 text-white overflow-hidden shadow-lg">
+                    <div class="relative z-10 max-w-2xl">
+                        <span class="inline-block bg-emerald-500/30 text-emerald-200 border border-emerald-400/30 text-xs font-semibold px-3 py-1 rounded-full mb-3">
+                            Grade 9 English Descriptive Learning
+                        </span>
+                        <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-2">EXPLORING FAUNA OF INDONESIA</h1>
+                        <p class="text-emerald-100 text-sm sm:text-base mb-6 leading-relaxed">
+                            Discover Indonesian Wildlife Through English! Practice descriptive language, vocabulary, grammar, and listening skills while protecting endangered biodiversity.
+                        </p>
+                        <div class="flex flex-wrap gap-3">
+                            <button onclick="navigateTo('bekantan')" class="bg-emerald-500 hover:bg-emerald-400 text-slate-900 font-bold px-5 py-2.5 rounded-xl shadow-md transition flex items-center gap-2">
+                                Start Exploring <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                            <button onclick="navigateTo('objectives')" class="bg-white/10 hover:bg-white/20 text-white font-semibold px-5 py-2.5 rounded-xl border border-white/20 transition">
+                                Learning Objectives
+                            </button>
+                            <a id="home-google-docs-btn" href="#" target="_blank" class="hidden bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold px-4 py-2.5 rounded-xl transition flex items-center gap-2">
+                                <i class="fa-solid fa-file-word"></i> Class Docs
+                            </a>
+                        </div>
+                    </div>
+                    <div class="absolute -right-8 -bottom-10 opacity-20 text-9xl select-none pointer-events-none">
+                        🌿🦧🦜
+                    </div>
+                </div>
+
+                <!-- Topic Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-5 pt-4">
+                    <!-- Bekantan -->
+                    <div onclick="navigateTo('bekantan')" class="group bg-emerald-50/50 hover:bg-emerald-50 border border-emerald-200/80 rounded-2xl p-5 cursor-pointer transition shadow-sm hover:shadow-md">
+                        <div class="text-4xl mb-3">🐒</div>
+                        <h3 class="text-lg font-bold text-jungle-900 group-hover:text-jungle-700">Proboscis Monkey</h3>
+                        <p class="text-xs text-slate-600 mt-1 leading-relaxed">Discover Bekantan, the reddish-brown monkey of Borneo known for its remarkable long nose.</p>
+                        <span class="inline-flex items-center text-xs font-bold text-jungle-700 mt-4 group-hover:translate-x-1 transition-transform">
+                            Explore Bekantan &rarr;
+                        </span>
+                    </div>
+
+                    <!-- Orangutan -->
+                    <div onclick="navigateTo('orangutan')" class="group bg-amber-50/50 hover:bg-amber-50 border border-amber-200/80 rounded-2xl p-5 cursor-pointer transition shadow-sm hover:shadow-md">
+                        <div class="text-4xl mb-3">🦧</div>
+                        <h3 class="text-lg font-bold text-amber-950 group-hover:text-amber-800">Orangutan</h3>
+                        <p class="text-xs text-slate-600 mt-1 leading-relaxed">Learn about Sumatra & Borneo's intelligent great ape with strong long arms and red fur.</p>
+                        <span class="inline-flex items-center text-xs font-bold text-amber-800 mt-4 group-hover:translate-x-1 transition-transform">
+                            Explore Orangutan &rarr;
+                        </span>
+                    </div>
+
+                    <!-- Birds -->
+                    <div onclick="navigateTo('birds')" class="group bg-teal-50/50 hover:bg-teal-50 border border-teal-200/80 rounded-2xl p-5 cursor-pointer transition shadow-sm hover:shadow-md">
+                        <div class="text-4xl mb-3">🐦</div>
+                        <h3 class="text-lg font-bold text-teal-950 group-hover:text-teal-800">Indonesian Birds</h3>
+                        <p class="text-xs text-slate-600 mt-1 leading-relaxed">Explore iconic endemic species: Jalak Bali, Cenderawasih, Hornbill, and Javan Hawk-Eagle.</p>
+                        <span class="inline-flex items-center text-xs font-bold text-teal-800 mt-4 group-hover:translate-x-1 transition-transform">
+                            Explore Birds &rarr;
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Quick Action Hub -->
+                <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200">
+                    <h3 class="font-bold text-slate-700 text-sm mb-3">Quick Navigation Hub</h3>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                        <button onclick="navigateTo('vocabulary')" class="p-3 bg-white border rounded-xl text-center text-xs font-semibold hover:border-emerald-500 hover:text-emerald-700 transition">
+                            <i class="fa-solid fa-book text-base text-emerald-600 block mb-1"></i> Vocabulary Lab
+                        </button>
+                        <button onclick="navigateTo('games')" class="p-3 bg-white border rounded-xl text-center text-xs font-semibold hover:border-emerald-500 hover:text-emerald-700 transition">
+                            <i class="fa-solid fa-gamepad text-base text-purple-600 block mb-1"></i> 5 Mini Games
+                        </button>
+                        <button onclick="navigateTo('quiz')" class="p-3 bg-white border rounded-xl text-center text-xs font-semibold hover:border-emerald-500 hover:text-emerald-700 transition">
+                            <i class="fa-solid fa-circle-question text-base text-blue-600 block mb-1"></i> Final Quiz
+                        </button>
+                        <button onclick="navigateTo('progress')" class="p-3 bg-white border rounded-xl text-center text-xs font-semibold hover:border-emerald-500 hover:text-emerald-700 transition">
+                            <i class="fa-solid fa-trophy text-base text-amber-500 block mb-1"></i> My Badges
+                        </button>
+                    </div>
+                </div>
+
+                <div class="text-center text-xs text-slate-400 font-semibold tracking-widest uppercase pt-2">
+                    "Explore. Learn. Protect."
+                </div>
+            </section>
+
+            <section id="page-objectives" class="page-content space-y-6 hidden">
+                <div class="border-b pb-4">
+                    <h2 class="text-2xl font-bold text-jungle-900 flex items-center gap-2">
+                        <i class="fa-solid fa-bullseye text-emerald-600"></i> Learning Objectives
+                    </h2>
+                    <p class="text-xs text-slate-500">Grade 9 English Competencies — Exploring Fauna of Indonesia</p>
+                </div>
+
+                <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-5">
+                    <h3 class="font-bold text-jungle-900 text-base mb-3">By the end of this lesson, I can:</h3>
+                    <ul class="space-y-2.5 text-xs sm:text-sm text-slate-700">
+                        <li class="flex items-start gap-2.5">
+                            <i class="fa-solid fa-circle-check text-emerald-600 mt-1"></i>
+                            <span>Identify key facts and specific information about Indonesian fauna.</span>
+                        </li>
+                        <li class="flex items-start gap-2.5">
+                            <i class="fa-solid fa-circle-check text-emerald-600 mt-1"></i>
+                            <span>Describe physical characteristics using descriptive adjectives (e.g., <i>long nose, reddish fur, strong wings</i>).</span>
+                        </li>
+                        <li class="flex items-start gap-2.5">
+                            <i class="fa-solid fa-circle-check text-emerald-600 mt-1"></i>
+                            <span>Explain animal habitats, diets, and natural behaviors.</span>
+                        </li>
+                        <li class="flex items-start gap-2.5">
+                            <i class="fa-solid fa-circle-check text-emerald-600 mt-1"></i>
+                            <span>Use the <b>Simple Present Tense</b> and verbs <b>has / have</b> correctly.</span>
+                        </li>
+                        <li class="flex items-start gap-2.5">
+                            <i class="fa-solid fa-circle-check text-emerald-600 mt-1"></i>
+                            <span>Analyze the <b>Generic Structure</b> of a descriptive text (Identification & Description).</span>
+                        </li>
+                        <li class="flex items-start gap-2.5">
+                            <i class="fa-solid fa-circle-check text-emerald-600 mt-1"></i>
+                            <span>Construct structured descriptive paragraphs using guided prompts.</span>
+                        </li>
+                        <li class="flex items-start gap-2.5">
+                            <i class="fa-solid fa-circle-check text-emerald-600 mt-1"></i>
+                            <span>Practice spoken descriptions using English speech recognition templates.</span>
+                        </li>
+                        <li class="flex items-start gap-2.5">
+                            <i class="fa-solid fa-circle-check text-emerald-600 mt-1"></i>
+                            <span>Demonstrate conservation awareness regarding endangered Indonesian wildlife.</span>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="page-bekantan" class="page-content space-y-6 hidden">
+                <div class="border-b pb-4 flex justify-between items-center">
+                    <div>
+                        <h2 class="text-2xl font-bold text-jungle-900">Proboscis Monkey (Bekantan)</h2>
+                        <p class="text-xs text-slate-500">Subtopic A — Borneo's Unique Primate</p>
+                    </div>
+                    <button onclick="speakText('Proboscis monkey, also known as Bekantan, is an endemic primate in Borneo.')" class="bg-emerald-100 text-emerald-800 text-xs px-3 py-1.5 rounded-lg hover:bg-emerald-200 transition flex items-center gap-1 font-semibold">
+                        <i class="fa-solid fa-volume-high"></i> Listen Intro
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-4">
+                        <div class="bg-slate-100 rounded-2xl p-6 text-center border relative overflow-hidden">
+                            <div class="text-8xl my-4">🐒</div>
+                            <span class="bg-amber-100 text-amber-900 text-xs font-bold px-3 py-1 rounded-full border border-amber-300">
+                                Status: Endangered (IUCN)
+                            </span>
+                        </div>
+                        <div class="bg-slate-50 rounded-2xl p-4 border space-y-2 text-xs">
+                            <p><b>Common Name:</b> Proboscis Monkey</p>
+                            <p><b>Indonesian Name:</b> Bekantan</p>
+                            <p><b>Scientific Name:</b> <i>Nasalis larvatus</i></p>
+                            <p><b>Habitat:</b> Mangrove forests, coastal wetlands, lowland forests in Borneo.</p>
+                            <p><b>Diet:</b> Leaves, mangrove shoots, unripened fruits, seeds.</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <h3 class="font-bold text-base text-slate-800">Key Characteristics</h3>
+                        <div class="grid grid-cols-1 gap-3">
+                            <div class="p-3.5 bg-emerald-50 rounded-xl border border-emerald-100">
+                                <h4 class="font-bold text-xs text-emerald-900">1. Large Nose</h4>
+                                <p class="text-xs text-slate-600 mt-1">Male Bekantans have prominent, long noses used to attract females and amplify warning calls.</p>
+                            </div>
+                            <div class="p-3.5 bg-emerald-50 rounded-xl border border-emerald-100">
+                                <h4 class="font-bold text-xs text-emerald-900">2. Reddish-Brown Fur</h4>
+                                <p class="text-xs text-slate-600 mt-1">Their coat is soft reddish-brown on the back and gray/cream on the abdomen.</p>
+                            </div>
+                            <div class="p-3.5 bg-emerald-50 rounded-xl border border-emerald-100">
+                                <h4 class="font-bold text-xs text-emerald-900">3. Expert Swimmers</h4>
+                                <p class="text-xs text-slate-600 mt-1">Bekantans have webbed feet and hands. They are renowned for swimming across rivers and diving under water.</p>
+                            </div>
+                        </div>
+
+                        <!-- Check Understanding Box -->
+                        <div class="p-4 bg-amber-50 rounded-2xl border border-amber-200">
+                            <h4 class="font-bold text-xs text-amber-900 mb-2 flex items-center gap-1">
+                                <i class="fa-solid fa-lightbulb"></i> Check Your Understanding
+                            </h4>
+                            <p class="text-xs text-slate-700 mb-2">Where do Bekantans mainly live?</p>
+                            <div class="flex flex-wrap gap-2">
+                                <button onclick="checkQuickAnswer(this, true, 'Correct! Bekantans live in mangrove and wetland forests in Borneo.')" class="bg-white border hover:bg-emerald-100 text-xs px-3 py-1.5 rounded-lg">Mangrove forests</button>
+                                <button onclick="checkQuickAnswer(this, false, 'Incorrect. They live in mangrove forests and wetlands, not dry deserts.')" class="bg-white border hover:bg-rose-100 text-xs px-3 py-1.5 rounded-lg">Desert dunes</button>
+                            </div>
+                            <p class="quick-feedback text-xs font-semibold mt-2 hidden"></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="page-orangutan" class="page-content space-y-6 hidden">
+                <div class="border-b pb-4 flex justify-between items-center">
+                    <div>
+                        <h2 class="text-2xl font-bold text-jungle-900">Orangutan (Great Ape)</h2>
+                        <p class="text-xs text-slate-500">Subtopic B — Interactive Anatomic Explorer</p>
+                    </div>
+                    <button onclick="speakText('Orangutans are highly intelligent primates native to the rainforests of Sumatra and Borneo.')" class="bg-amber-100 text-amber-800 text-xs px-3 py-1.5 rounded-lg hover:bg-amber-200 transition flex items-center gap-1 font-semibold">
+                        <i class="fa-solid fa-volume-high"></i> Listen Intro
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+                    <!-- Interactive Hotspot Display -->
+                    <div class="bg-amber-50/50 rounded-2xl p-6 border border-amber-200 text-center relative flex flex-col items-center justify-center min-h-[320px]">
+                        <span class="text-xs text-amber-800 font-semibold mb-2">Click the interactive hotspots on the Orangutan body:</span>
+                        
+                        <!-- Visual Container -->
+                        <div class="relative w-64 h-64 bg-white rounded-3xl shadow-inner flex items-center justify-center border">
+                            <div class="text-9xl select-none">🦧</div>
+                            
+                            <!-- Hotspot 1: Head / Intelligence -->
+                            <button onclick="showHotspotInfo('head')" class="absolute top-8 left-12 w-7 h-7 bg-amber-500 text-white rounded-full font-bold text-xs flex items-center justify-center shadow-md hotspot-pulse hover:scale-110 transition">
+                                1
+                            </button>
+                            <!-- Hotspot 2: Long Arms -->
+                            <button onclick="showHotspotInfo('arms')" class="absolute top-28 left-6 w-7 h-7 bg-amber-500 text-white rounded-full font-bold text-xs flex items-center justify-center shadow-md hotspot-pulse hover:scale-110 transition">
+                                2
+                            </button>
+                            <!-- Hotspot 3: Red Fur -->
+                            <button onclick="showHotspotInfo('fur')" class="absolute top-32 right-12 w-7 h-7 bg-amber-500 text-white rounded-full font-bold text-xs flex items-center justify-center shadow-md hotspot-pulse hover:scale-110 transition">
+                                3
+                            </button>
+                            <!-- Hotspot 4: Hands & Feet -->
+                            <button onclick="showHotspotInfo('hands')" class="absolute bottom-8 right-16 w-7 h-7 bg-amber-500 text-white rounded-full font-bold text-xs flex items-center justify-center shadow-md hotspot-pulse hover:scale-110 transition">
+                                4
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Hotspot Detail Box -->
+                    <div id="orangutan-info-box" class="bg-white p-5 rounded-2xl border border-slate-200 space-y-3">
+                        <h3 id="hotspot-title" class="font-bold text-lg text-amber-900">Click a numbered hotspot on the image</h3>
+                        <p id="hotspot-body" class="text-xs text-slate-600 leading-relaxed">
+                            Orangutans are arboreal mammals. Click on 1, 2, 3, or 4 to explore physical traits and English vocabulary.
+                        </p>
+                        <div id="hotspot-vocab" class="hidden bg-amber-50 p-3 rounded-xl border border-amber-200">
+                            <span class="text-xs font-bold text-amber-900">Target Vocabulary:</span>
+                            <p id="hotspot-vocab-text" class="text-xs text-amber-800 font-mono mt-0.5"></p>
+                        </div>
+                        <div id="hotspot-sentence" class="hidden bg-emerald-50 p-3 rounded-xl border border-emerald-200">
+                            <span class="text-xs font-bold text-emerald-900">Descriptive Sentence:</span>
+                            <p id="hotspot-sentence-text" class="text-xs text-emerald-800 italic mt-0.5"></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="page-birds" class="page-content space-y-6 hidden">
+                <div class="border-b pb-4">
+                    <h2 class="text-2xl font-bold text-jungle-900">Indonesian Birds</h2>
+                    <p class="text-xs text-slate-500">Subtopic C — Endemic Avian Species</p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <!-- Bali Myna -->
+                    <div class="p-4 bg-slate-50 rounded-2xl border hover:border-emerald-300 transition space-y-2">
+                        <div class="flex items-center gap-3">
+                            <span class="text-3xl">🕊️</span>
+                            <div>
+                                <h3 class="font-bold text-sm text-slate-800">Bali Myna (Jalak Bali)</h3>
+                                <p class="text-xs text-slate-500"><i>Leucopsar rothschildi</i></p>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-600"><b>Habitat:</b> Dry forest in Bali, Indonesia.</p>
+                        <p class="text-xs text-slate-600"><b>Appearance:</b> Pure white feathers with blue skin patch around eyes and black wing tips.</p>
+                        <p class="text-xs text-slate-600"><b>Conservation:</b> Critically Endangered.</p>
+                    </div>
+
+                    <!-- Bird-of-Paradise -->
+                    <div class="p-4 bg-slate-50 rounded-2xl border hover:border-emerald-300 transition space-y-2">
+                        <div class="flex items-center gap-3">
+                            <span class="text-3xl">🦜</span>
+                            <div>
+                                <h3 class="font-bold text-sm text-slate-800">Bird-of-Paradise (Cenderawasih)</h3>
+                                <p class="text-xs text-slate-500"><i>Paradisaeidae family</i></p>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-600"><b>Habitat:</b> Tropical rainforests in Papua, Indonesia.</p>
+                        <p class="text-xs text-slate-600"><b>Appearance:</b> Vibrant yellow, green, and red feathers; elaborate courtship dance.</p>
+                        <p class="text-xs text-slate-600"><b>Conservation:</b> Protected under Indonesian law.</p>
+                    </div>
+
+                    <!-- Hornbill -->
+                    <div class="p-4 bg-slate-50 rounded-2xl border hover:border-emerald-300 transition space-y-2">
+                        <div class="flex items-center gap-3">
+                            <span class="text-3xl">🦅</span>
+                            <div>
+                                <h3 class="font-bold text-sm text-slate-800">Rhinoceros Hornbill (Rangkong)</h3>
+                                <p class="text-xs text-slate-500"><i>Buceros rhinoceros</i></p>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-600"><b>Habitat:</b> Rainforest canopy in Sumatra, Borneo, Java.</p>
+                        <p class="text-xs text-slate-600"><b>Appearance:</b> Prominent golden-orange casque on top of a large downward beak.</p>
+                        <p class="text-xs text-slate-600"><b>Conservation:</b> Vulnerable / Protected.</p>
+                    </div>
+
+                    <!-- Javan Hawk-Eagle -->
+                    <div class="p-4 bg-slate-50 rounded-2xl border hover:border-emerald-300 transition space-y-2">
+                        <div class="flex items-center gap-3">
+                            <span class="text-3xl">🦅</span>
+                            <div>
+                                <h3 class="font-bold text-sm text-slate-800">Javan Hawk-Eagle (Elang Jawa)</h3>
+                                <p class="text-xs text-slate-500"><i>Nisaetus bartelsi</i></p>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-600"><b>Habitat:</b> Humid rainforests in Java, Indonesia.</p>
+                        <p class="text-xs text-slate-600"><b>Appearance:</b> Distinctive head crest feather; national symbol inspiration (Garuda).</p>
+                        <p class="text-xs text-slate-600"><b>Conservation:</b> Endangered.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="page-vocabulary" class="page-content space-y-6 hidden">
+                <div class="border-b pb-4 flex justify-between items-center">
+                    <div>
+                        <h2 class="text-2xl font-bold text-jungle-900">Vocabulary Lab</h2>
+                        <p class="text-xs text-slate-500">Master Grade 9 Fauna & Conservation Key Terms</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="renderFlashcards()" class="text-xs bg-emerald-600 text-white font-semibold px-3 py-1.5 rounded-lg hover:bg-emerald-700">
+                            Flashcards
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Flashcard Display -->
+                <div class="max-w-md mx-auto bg-emerald-50 rounded-2xl p-6 border border-emerald-200 text-center space-y-4 shadow-sm">
+                    <span id="vocab-card-num" class="text-xs text-slate-400 font-bold uppercase tracking-widest">Card 1 / 10</span>
+                    <h3 id="vocab-card-term" class="text-2xl font-extrabold text-jungle-900">HABITAT</h3>
+                    <p id="vocab-card-meaning" class="text-sm font-semibold text-emerald-800">Tempat hidup alami hewan / tumbuhan</p>
+                    <p id="vocab-card-example" class="text-xs text-slate-600 italic">"The rainforest is an essential habitat for orangutans."</p>
+                    
+                    <div class="flex justify-center gap-3 pt-2">
+                        <button onclick="playVocabAudio()" class="bg-amber-500 hover:bg-amber-400 text-slate-900 text-xs font-bold px-4 py-2 rounded-xl flex items-center gap-1.5">
+                            <i class="fa-solid fa-volume-high"></i> Pronounce
+                        </button>
+                        <button onclick="nextVocabCard()" class="bg-jungle-800 hover:bg-jungle-700 text-white text-xs font-bold px-4 py-2 rounded-xl flex items-center gap-1.5">
+                            Next Card <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="page-reading" class="page-content space-y-6 hidden">
+                <div class="border-b pb-4">
+                    <h2 class="text-2xl font-bold text-jungle-900">Reading & Comprehension</h2>
+                    <p class="text-xs text-slate-500">Descriptive Texts & Interactive Comprehension Questions</p>
+                </div>
+
+                <!-- Text Selector Tabs -->
+                <div class="flex border-b text-xs font-bold space-x-2">
+                    <button onclick="switchReadingText('bekantan')" id="tab-read-bekantan" class="px-4 py-2 text-emerald-700 border-b-2 border-emerald-600 font-bold">Bekantan</button>
+                    <button onclick="switchReadingText('orangutan')" id="tab-read-orangutan" class="px-4 py-2 text-slate-500 hover:text-slate-700">Orangutan</button>
+                    <button onclick="switchReadingText('birds')" id="tab-read-birds" class="px-4 py-2 text-slate-500 hover:text-slate-700">Indonesian Birds</button>
+                </div>
+
+                <!-- Reading Container -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-slate-50 rounded-2xl p-5 border space-y-3">
+                        <div class="flex justify-between items-center">
+                            <h3 id="reading-title" class="font-bold text-base text-jungle-900">Text 1: Proboscis Monkey</h3>
+                            <button onclick="readAloudText()" class="text-xs bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-lg font-semibold hover:bg-emerald-200">
+                                <i class="fa-solid fa-volume-high"></i> Read Aloud
+                            </button>
+                        </div>
+                        <div id="reading-passage" class="text-xs sm:text-sm text-slate-700 leading-relaxed space-y-2">
+                            <!-- Injected by JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Reading Comprehension Quiz -->
+                    <div class="bg-white rounded-2xl p-5 border space-y-4">
+                        <h3 class="font-bold text-sm text-slate-800 border-b pb-2">Reading Comprehension Questions</h3>
+                        <div id="reading-questions-container" class="space-y-4 text-xs">
+                            <!-- Injected by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="page-grammar" class="page-content space-y-6 hidden">
+                <div class="border-b pb-4">
+                    <h2 class="text-2xl font-bold text-jungle-900">Grammar Lab</h2>
+                    <p class="text-xs text-slate-500">Simple Present Tense, Has/Have, and Descriptive Adjectives</p>
+                </div>
+
+                <div class="bg-emerald-50 rounded-2xl p-5 border border-emerald-200 space-y-3">
+                    <h3 class="font-bold text-sm text-emerald-900">1. Simple Present Tense (Habits & Facts)</h3>
+                    <p class="text-xs text-slate-700">We use the <b>Simple Present Tense</b> to describe facts, habits, and physical features of animals.</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                        <div class="bg-white p-3 rounded-xl border">
+                            <p class="font-bold text-slate-800">Plural Subject (They/We/Plural)</p>
+                            <p class="text-emerald-700 font-mono mt-1">Subject + Verb 1</p>
+                            <p class="text-slate-500 italic mt-0.5">"Orangutans <b>live</b> in rainforests."</p>
+                        </div>
+                        <div class="bg-white p-3 rounded-xl border">
+                            <p class="font-bold text-slate-800">Singular Subject (He/She/It/Singular)</p>
+                            <p class="text-emerald-700 font-mono mt-1">Subject + Verb1 + s/es</p>
+                            <p class="text-slate-500 italic mt-0.5">"The bird <b>eats</b> seeds."</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interactive Practice -->
+                <div class="bg-white rounded-2xl p-5 border space-y-4">
+                    <h3 class="font-bold text-sm text-slate-800">Grammar Practice: Choose the Correct Verb Form</h3>
+                    
+                    <div class="space-y-3 text-xs">
+                        <div class="p-3 bg-slate-50 rounded-xl border space-y-2">
+                            <p class="font-semibold text-slate-800">1. Bekantans ________ (eat/eats) leaves and mangrove shoots.</p>
+                            <div class="flex gap-2">
+                                <button onclick="checkGrammarDrill(this, true, 'Correct! Bekantans is plural, so we use eat.')" class="bg-white border px-3 py-1 rounded">eat</button>
+                                <button onclick="checkGrammarDrill(this, false, 'Incorrect. Bekantans is plural, so do not add -s.')" class="bg-white border px-3 py-1 rounded">eats</button>
+                            </div>
+                        </div>
+
+                        <div class="p-3 bg-slate-50 rounded-xl border space-y-2">
+                            <p class="font-semibold text-slate-800">2. An orangutan ________ (has/have) long arms for swinging on branches.</p>
+                            <div class="flex gap-2">
+                                <button onclick="checkGrammarDrill(this, true, 'Correct! Singular subject (an orangutan) takes has.')" class="bg-white border px-3 py-1 rounded">has</button>
+                                <button onclick="checkGrammarDrill(this, false, 'Incorrect. An orangutan is singular.')" class="bg-white border px-3 py-1 rounded">have</button>
+                            </div>
+                        </div>
+
+                        <div class="p-3 bg-slate-50 rounded-xl border space-y-2">
+                            <p class="font-semibold text-slate-800">3. Jalak Bali ________ (be) a rare bird with white feathers.</p>
+                            <div class="flex gap-2">
+                                <button onclick="checkGrammarDrill(this, true, 'Correct! Jalak Bali is singular, so we use is.')" class="bg-white border px-3 py-1 rounded">is</button>
+                                <button onclick="checkGrammarDrill(this, false, 'Incorrect. Jalak Bali is singular.')" class="bg-white border px-3 py-1 rounded">are</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="page-listening" class="page-content space-y-6 hidden">
+                <div class="border-b pb-4">
+                    <h2 class="text-2xl font-bold text-jungle-900">Listening Activity</h2>
+                    <p class="text-xs text-slate-500">Listen to Audio Descriptions & Answer Comprehension Tasks</p>
+                </div>
+
+                <div class="bg-slate-50 rounded-2xl p-6 border text-center space-y-4">
+                    <div class="w-16 h-16 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center text-2xl mx-auto shadow-inner">
+                        <i class="fa-solid fa-headphones"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-base">Audio Track: "Fauna Description"</h3>
+                        <p class="text-xs text-slate-500">Click the button below to listen to the spoken description.</p>
+                    </div>
+
+                    <button onclick="playListeningAudio()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-6 py-2.5 rounded-xl shadow-md transition inline-flex items-center gap-2">
+                        <i class="fa-solid fa-play"></i> Play Audio Track
+                    </button>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl border space-y-3">
+                    <h3 class="font-bold text-sm text-slate-800">Listening Assessment</h3>
+                    <p class="text-xs text-slate-600">Based on the audio you heard, answer the question:</p>
+                    
+                    <p class="text-xs font-semibold text-slate-800 pt-2">Which animal was described as having a large downward beak and golden casque?</p>
+                    <div class="space-y-2 text-xs">
+                        <button onclick="checkQuickAnswer(this, false, 'Incorrect. Bekantans have large noses, not downward beaks.')" class="w-full text-left p-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl border">A. Bekantan</button>
+                        <button onclick="checkQuickAnswer(this, true, 'Correct! Hornbills have a downwards beak and golden-orange casque.')" class="w-full text-left p-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl border">B. Rhinoceros Hornbill</button>
+                        <button onclick="checkQuickAnswer(this, false, 'Incorrect. Orangutans do not have beaks.')" class="w-full text-left p-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl border">C. Orangutan</button>
+                    </div>
+                    <p class="quick-feedback text-xs font-semibold mt-2 hidden"></p>
+                </div>
+            </section>
+
+            <section id="page-speaking" class="page-content space-y-6 hidden">
+                <div class="border-b pb-4">
+                    <h2 class="text-2xl font-bold text-jungle-900">Speaking Activity</h2>
+                    <p class="text-xs text-slate-500">Practice Spoken Descriptions with Web Speech Recognition</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-amber-50 rounded-2xl p-5 border border-amber-200 space-y-3">
+                        <h3 class="font-bold text-sm text-amber-900">Speaking Template Prompt</h3>
+                        <div class="bg-white p-4 rounded-xl border text-xs text-slate-700 leading-relaxed font-mono">
+                            "This is an orangutan. It lives in tropical rainforests of Borneo and Sumatra. It has red fur and long arms. It eats fruits and leaves."
+                        </div>
+                        <p class="text-xs text-slate-500">Read the template aloud to practice your pronunciation.</p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-2xl border text-center space-y-4">
+                        <div class="w-16 h-16 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center text-2xl mx-auto shadow-inner">
+                            <i class="fa-solid fa-microphone"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-sm text-slate-800">Voice Practice</h3>
+                            <p class="text-xs text-slate-500">Click the microphone button and read the prompt above.</p>
+                        </div>
+
+                        <button onclick="startSpeechRecognition()" class="bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold px-5 py-2.5 rounded-xl transition inline-flex items-center gap-2">
+                            <i class="fa-solid fa-microphone"></i> Start Recording
+                        </button>
+
+                        <div id="speaking-output" class="p-3 bg-slate-50 rounded-xl border text-xs min-h-[60px] text-slate-600 italic">
+                            Your spoken output will appear here...
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="page-writing" class="page-content space-y-6 hidden">
+                <div class="border-b pb-4">
+                    <h2 class="text-2xl font-bold text-jungle-900">Writing Lab: Animal Paragraph Generator</h2>
+                    <p class="text-xs text-slate-500">Draft a Structured English Descriptive Paragraph</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <form id="writing-form" onsubmit="generateParagraph(event)" class="space-y-3 text-xs">
+                        <div>
+                            <label class="font-bold text-slate-700">Select Animal:</label>
+                            <select id="write-animal" class="w-full mt-1 p-2 bg-slate-50 border rounded-xl">
+                                <option value="Proboscis Monkey">Proboscis Monkey (Bekantan)</option>
+                                <option value="Orangutan">Orangutan</option>
+                                <option value="Jalak Bali">Jalak Bali</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="font-bold text-slate-700">Habitat:</label>
+                            <input type="text" id="write-habitat" value="mangrove forests in Borneo" class="w-full mt-1 p-2 bg-slate-50 border rounded-xl" required>
+                        </div>
+                        <div>
+                            <label class="font-bold text-slate-700">Physical Appearance:</label>
+                            <input type="text" id="write-appearance" value="a reddish-brown fur and a prominent long nose" class="w-full mt-1 p-2 bg-slate-50 border rounded-xl" required>
+                        </div>
+                        <div>
+                            <label class="font-bold text-slate-700">Diet & Food:</label>
+                            <input type="text" id="write-diet" value="mangrove leaves, unripened fruits, and seeds" class="w-full mt-1 p-2 bg-slate-50 border rounded-xl" required>
+                        </div>
+                        <div>
+                            <label class="font-bold text-slate-700">Why is it important to protect?</label>
+                            <input type="text" id="write-conservation" value="it is an endangered species and a vital part of Indonesia's ecosystem" class="w-full mt-1 p-2 bg-slate-50 border rounded-xl" required>
+                        </div>
+
+                        <button type="submit" class="w-full bg-jungle-800 hover:bg-jungle-700 text-white font-bold py-2.5 rounded-xl transition">
+                            Generate Paragraph ✨
+                        </button>
+                    </form>
+
+                    <!-- Generated Output Display -->
+                    <div class="bg-emerald-50/60 p-5 rounded-2xl border border-emerald-200 flex flex-col justify-between space-y-4">
+                        <div>
+                            <h3 class="font-bold text-sm text-jungle-900 border-b border-emerald-200 pb-2">Generated Paragraph</h3>
+                            <div id="generated-paragraph-box" class="mt-3 text-xs sm:text-sm text-slate-700 leading-relaxed font-sans bg-white p-4 rounded-xl border">
+                                Fill out the form on the left and click "Generate Paragraph" to build your descriptive text.
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap gap-2 pt-2">
+                            <button onclick="copyGeneratedParagraph()" class="bg-white border text-xs font-semibold px-3 py-1.5 rounded-lg hover:bg-slate-50">
+                                <i class="fa-solid fa-copy"></i> Copy Text
+                            </button>
+                            <button onclick="window.print()" class="bg-white border text-xs font-semibold px-3 py-1.5 rounded-lg hover:bg-slate-50">
+                                <i class="fa-solid fa-print"></i> Print
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="page-games" class="page-content space-y-6 hidden">
+                <div class="border-b pb-4">
+                    <h2 class="text-2xl font-bold text-jungle-900">Interactive Mini Games</h2>
+                    <p class="text-xs text-slate-500">Reinforce Language Skills with Gamified Drills</p>
+                </div>
+
+                <!-- Game Selection Tabs -->
+                <div class="flex flex-wrap gap-2 text-xs font-bold">
+                    <button onclick="loadGame('scramble')" class="px-3 py-2 bg-emerald-100 text-emerald-800 rounded-xl hover:bg-emerald-200">1. Word Scramble</button>
+                    <button onclick="loadGame('matching')" class="px-3 py-2 bg-slate-100 text-slate-700 rounded-xl hover:bg-slate-200">2. Match Animal</button>
+                    <button onclick="loadGame('whoami')" class="px-3 py-2 bg-slate-100 text-slate-700 rounded-xl hover:bg-slate-200">3. Who Am I?</button>
+                </div>
+
+                <div id="game-container" class="bg-slate-50 p-6 rounded-2xl border min-h-[300px]">
+                    <!-- Injected by JS -->
+                </div>
+            </section>
+
+            <section id="page-conservation" class="page-content space-y-6 hidden">
+                <div class="border-b pb-4">
+                    <h2 class="text-2xl font-bold text-jungle-900">Conservation Challenge</h2>
+                    <p class="text-xs text-slate-500">Protect Indonesian Wildlife — Scenario Based Learning</p>
+                </div>
+
+                <div class="bg-emerald-800 text-white p-6 rounded-2xl shadow-md space-y-3">
+                    <span class="text-xs font-bold bg-emerald-600 px-2.5 py-1 rounded-full uppercase">Wildlife Ambassador Challenge</span>
+                    <h3 class="text-lg font-bold">Scenario: Deforestation Threat in Borneo</h3>
+                    <p class="text-xs text-emerald-100 leading-relaxed">
+                        A rainforest habitat for Bekantans and Orangutans is threatened. As a Grade 9 Student Conservation Ambassador, what is the best ethical action to support biodiversity protection?
+                    </p>
+
+                    <div class="space-y-2 pt-2 text-xs text-slate-800">
+                        <button onclick="checkQuickAnswer(this, true, 'Excellent decision! Educating people and supporting forest conservation protects natural habitats.')" class="w-full text-left p-3 bg-white hover:bg-emerald-50 rounded-xl font-medium">
+                            A. Spread awareness, support forest protection, and reject illegal wildlife trade.
+                        </button>
+                        <button onclick="checkQuickAnswer(this, false, 'Incorrect. Buying wild animals as pets fuels illegal poaching.')" class="w-full text-left p-3 bg-white hover:bg-rose-50 rounded-xl font-medium">
+                            B. Buy wild orangutans as domestic pets to keep them inside houses.
+                        </button>
+                        <button onclick="checkQuickAnswer(this, false, 'Incorrect. Throwing rubbish pollutes natural mangrove habitats.')" class="w-full text-left p-3 bg-white hover:bg-rose-50 rounded-xl font-medium">
+                            C. Throw rubbish and plastic waste into rivers near mangrove forests.
+                        </button>
+                    </div>
+                    <p class="quick-feedback text-xs font-bold text-amber-300 mt-2 hidden"></p>
+                </div>
+            </section>
+
+            <section id="page-quiz" class="page-content space-y-6 hidden">
+                <div class="border-b pb-4 flex justify-between items-center">
+                    <div>
+                        <h2 class="text-2xl font-bold text-jungle-900">Final Evaluative Quiz</h2>
+                        <p class="text-xs text-slate-500">20 Comprehensive Grade 9 Assessment Questions</p>
+                    </div>
+                    <span class="text-xs font-bold bg-blue-100 text-blue-800 px-3 py-1 rounded-full">Score: +200 XP</span>
+                </div>
+
+                <div id="quiz-start-screen" class="text-center py-10 space-y-4">
+                    <div class="text-6xl">📝</div>
+                    <h3 class="font-bold text-xl text-slate-800">Ready to Test Your Knowledge?</h3>
+                    <p class="text-xs text-slate-500 max-w-md mx-auto">
+                        This test evaluates Vocabulary, Reading Comprehension, Grammar, and Conservation awareness.
+                    </p>
+                    <button onclick="startFinalQuiz()" class="bg-jungle-800 hover:bg-jungle-700 text-white font-bold text-sm px-6 py-3 rounded-xl shadow-md transition">
+                        Start 20-Question Quiz
+                    </button>
+                </div>
+
+                <div id="quiz-body" class="hidden space-y-6">
+                    <div class="flex justify-between items-center text-xs font-bold text-slate-500">
+                        <span id="quiz-progress-text">Question 1 / 20</span>
+                        <span id="quiz-timer">Grade 9 Assessment</span>
+                    </div>
+
+                    <div id="quiz-question-box" class="bg-slate-50 p-5 rounded-2xl border space-y-4">
+                        <p id="quiz-question-text" class="font-bold text-sm text-slate-800"></p>
+                        <div id="quiz-options-container" class="space-y-2 text-xs"></div>
+                    </div>
+
+                    <div id="quiz-explanation-box" class="hidden p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-xs text-emerald-900">
+                        <!-- Injected by JS -->
+                    </div>
+
+                    <div class="flex justify-end">
+                        <button id="quiz-next-btn" onclick="nextQuizQuestion()" class="hidden bg-jungle-800 text-white font-bold text-xs px-5 py-2.5 rounded-xl">
+                            Next Question &rarr;
+                        </button>
+                    </div>
+                </div>
+
+                <div id="quiz-result-screen" class="hidden text-center py-10 space-y-4">
+                    <div id="quiz-result-icon" class="text-6xl">🏆</div>
+                    <h3 id="quiz-result-title" class="font-bold text-2xl text-jungle-900">Quiz Completed!</h3>
+                    <div class="bg-emerald-50 border border-emerald-200 max-w-sm mx-auto p-4 rounded-2xl space-y-1">
+                        <p class="text-xs text-slate-500">Your Score:</p>
+                        <p id="quiz-final-score" class="text-3xl font-extrabold text-emerald-700">0 / 20</p>
+                        <p id="quiz-final-percentage" class="text-xs font-bold text-slate-600">(0%)</p>
+                    </div>
+                    <p id="quiz-feedback-text" class="text-xs font-semibold text-slate-700"></p>
+
+                    <button onclick="resetAndRestartQuiz()" class="bg-emerald-600 text-white font-bold text-xs px-5 py-2.5 rounded-xl hover:bg-emerald-700 transition">
+                        Retake Quiz
+                    </button>
+                </div>
+            </section>
+
+            <section id="page-progress" class="page-content space-y-6 hidden">
+                <div class="border-b pb-4">
+                    <h2 class="text-2xl font-bold text-jungle-900">My Progress & Gamification</h2>
+                    <p class="text-xs text-slate-500">Track Completed Activities, XP, and Earned Badges</p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="p-4 bg-emerald-50 rounded-2xl border border-emerald-200 text-center">
+                        <span class="text-xs text-slate-500 font-bold">Total XP Earned</span>
+                        <p id="prog-xp" class="text-3xl font-extrabold text-emerald-700 mt-1">0</p>
+                    </div>
+                    <div class="p-4 bg-amber-50 rounded-2xl border border-amber-200 text-center">
+                        <span class="text-xs text-slate-500 font-bold">Quiz Score</span>
+                        <p id="prog-quiz" class="text-3xl font-extrabold text-amber-700 mt-1">-</p>
+                    </div>
+                    <div class="p-4 bg-blue-50 rounded-2xl border border-blue-200 text-center">
+                        <span class="text-xs text-slate-500 font-bold">Badges Unlocked</span>
+                        <p id="prog-badge-count" class="text-3xl font-extrabold text-blue-700 mt-1">0 / 7</p>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="font-bold text-sm text-slate-800 mb-3">Earned Achievements & Badges</h3>
+                    <div id="badges-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+                        <!-- Badges injected by JS -->
+                    </div>
+                </div>
+            </section>
+
+            <section id="page-teacher" class="page-content space-y-6 hidden">
+                <div class="border-b pb-4 flex justify-between items-center">
+                    <div>
+                        <h2 class="text-2xl font-bold text-jungle-900">Teacher Dashboard</h2>
+                        <p class="text-xs text-slate-500">Google Sheets Data Collector & Class Setup</p>
+                    </div>
+                    <button onclick="sendDataToGoogleSheets()" class="bg-emerald-700 text-white text-xs font-bold px-4 py-2 rounded-xl hover:bg-emerald-800 transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-cloud-arrow-up"></i> Sync to Google Sheets
+                    </button>
+                </div>
+
+                <!-- Setup Information & Links -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="p-4 bg-slate-50 rounded-2xl border space-y-2 text-xs">
+                        <span class="font-bold text-slate-700">Teacher Name:</span>
+                        <p id="dash-teacher-name" class="font-semibold text-emerald-800">Not Configured</p>
+                    </div>
+                    <div class="p-4 bg-slate-50 rounded-2xl border space-y-2 text-xs">
+                        <span class="font-bold text-slate-700">School:</span>
+                        <p id="dash-school-name" class="font-semibold text-emerald-800">Not Configured</p>
+                    </div>
+                    <div class="p-4 bg-slate-50 rounded-2xl border space-y-2 text-xs">
+                        <span class="font-bold text-slate-700">Class:</span>
+                        <p id="dash-class-name" class="font-semibold text-emerald-800">IX</p>
+                    </div>
+                </div>
+
+                <!-- Google External Links -->
+                <div class="flex flex-wrap gap-3">
+                    <a id="btn-open-sheets" href="#" target="_blank" class="bg-emerald-600 text-white font-bold text-xs px-4 py-2.5 rounded-xl hover:bg-emerald-700 flex items-center gap-2">
+                        <i class="fa-solid fa-table"></i> Open Google Sheets
+                    </a>
+                    <a id="btn-open-docs" href="#" target="_blank" class="bg-amber-600 text-white font-bold text-xs px-4 py-2.5 rounded-xl hover:bg-amber-700 flex items-center gap-2">
+                        <i class="fa-solid fa-file-word"></i> Open Google Docs Material
+                    </a>
+                    <button onclick="toggleScriptGuideModal()" class="bg-slate-800 text-white font-bold text-xs px-4 py-2.5 rounded-xl hover:bg-slate-700 flex items-center gap-2">
+                        <i class="fa-solid fa-code"></i> View Code.gs Setup Guide
+                    </button>
+                </div>
+
+                <!-- Student Local Record Table -->
+                <div class="bg-white rounded-2xl border overflow-hidden">
+                    <div class="p-4 border-b bg-slate-50 flex justify-between items-center">
+                        <h3 class="font-bold text-xs text-slate-700">Student Local Performance Record</h3>
+                        <span class="text-xs text-slate-400">Stored on Local Device</span>
+                    </div>
+                    <div class="p-4 text-xs space-y-2">
+                        <p><b>Student Name:</b> <span id="dash-student-name">Guest</span></p>
+                        <p><b>Current XP:</b> <span id="dash-student-xp">0</span></p>
+                        <p><b>Quiz Score:</b> <span id="dash-student-quiz">-</span></p>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <nav class="md:hidden bg-white border-t border-slate-200 sticky bottom-0 z-40 px-2 py-1.5 flex justify-around text-center text-[10px] font-semibold text-slate-500">
+        <button onclick="navigateTo('home')" class="p-1 hover:text-emerald-700">
+            <i class="fa-solid fa-house text-base block mb-0.5"></i> Home
+        </button>
+        <button onclick="navigateTo('vocabulary')" class="p-1 hover:text-emerald-700">
+            <i class="fa-solid fa-book text-base block mb-0.5"></i> Vocab
+        </button>
+        <button onclick="navigateTo('games')" class="p-1 hover:text-emerald-700">
+            <i class="fa-solid fa-gamepad text-base block mb-0.5"></i> Games
+        </button>
+        <button onclick="navigateTo('quiz')" class="p-1 hover:text-emerald-700">
+            <i class="fa-solid fa-circle-question text-base block mb-0.5"></i> Quiz
+        </button>
+        <button onclick="navigateTo('progress')" class="p-1 hover:text-emerald-700">
+            <i class="fa-solid fa-trophy text-base block mb-0.5"></i> Progress
+        </button>
+    </nav>
+
+    <!-- Configuration Modal -->
+    <div id="config-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl space-y-4">
+            <div class="flex justify-between items-center border-b pb-3">
+                <h3 class="font-bold text-base text-slate-800">Teacher & Class Settings</h3>
+                <button onclick="closeConfigModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <form id="config-form" onsubmit="saveTeacherConfig(event)" class="space-y-3 text-xs">
+                <div>
+                    <label class="font-bold text-slate-700">Teacher Name:</label>
+                    <input type="text" id="cfg-teacher-name" class="w-full mt-1 p-2 bg-slate-50 border rounded-xl" placeholder="e.g. Ibu Ani, S.Pd.">
+                </div>
+                <div>
+                    <label class="font-bold text-slate-700">School Name:</label>
+                    <input type="text" id="cfg-school-name" class="w-full mt-1 p-2 bg-slate-50 border rounded-xl" placeholder="e.g. SMP Negeri 1 Jakarta">
+                </div>
+                <div>
+                    <label class="font-bold text-slate-700">Google Apps Script Web App URL:</label>
+                    <input type="url" id="cfg-script-url" class="w-full mt-1 p-2 bg-slate-50 border rounded-xl" placeholder="https://script.google.com/macros/s/.../exec">
+                </div>
+                <div>
+                    <label class="font-bold text-slate-700">Google Docs Material URL:</label>
+                    <input type="url" id="cfg-docs-url" class="w-full mt-1 p-2 bg-slate-50 border rounded-xl" placeholder="https://docs.google.com/document/d/...">
+                </div>
+                <div>
+                    <label class="font-bold text-slate-700">Google Sheets Dashboard URL:</label>
+                    <input type="url" id="cfg-sheets-url" class="w-full mt-1 p-2 bg-slate-50 border rounded-xl" placeholder="https://docs.google.com/spreadsheets/d/...">
+                </div>
+
+                <div class="pt-2 flex justify-end gap-2">
+                    <button type="button" onclick="closeConfigModal()" class="px-4 py-2 border rounded-xl text-slate-600">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-emerald-700 text-white font-bold rounded-xl hover:bg-emerald-800">Save Config</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Student Onboarding Modal -->
+    <div id="student-onboard-modal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl space-y-4 text-center">
+            <div class="w-16 h-16 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center text-3xl mx-auto shadow-inner">
+                🦧
+            </div>
+            <div>
+                <h3 class="font-extrabold text-xl text-jungle-900">Welcome Explorer!</h3>
+                <p class="text-xs text-slate-500 mt-1">Enter your details to start learning Grade 9 English with Indonesian Fauna.</p>
+            </div>
+
+            <form onsubmit="submitStudentOnboard(event)" class="space-y-3 text-xs text-left">
+                <div>
+                    <label class="font-bold text-slate-700">Full Name:</label>
+                    <input type="text" id="onboard-name" class="w-full mt-1 p-2.5 bg-slate-50 border rounded-xl" placeholder="Your name..." required>
+                </div>
+                <div>
+                    <label class="font-bold text-slate-700">Class:</label>
+                    <input type="text" id="onboard-class" value="9A" class="w-full mt-1 p-2.5 bg-slate-50 border rounded-xl" required>
+                </div>
+                <button type="submit" class="w-full bg-jungle-800 hover:bg-jungle-700 text-white font-bold py-2.5 rounded-xl transition shadow-md">
+                    Start Learning &rarr;
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Code.gs Setup Modal -->
+    <div id="script-guide-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-xl space-y-4 max-h-[85vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b pb-3">
+                <h3 class="font-bold text-base text-slate-800">Google Apps Script Code.gs Guide</h3>
+                <button onclick="toggleScriptGuideModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <p class="text-xs text-slate-600 leading-relaxed">
+                Copy the code below into Google Apps Script connected to your Google Sheet to automatically log student test scores and progress.
+            </p>
+
+            <pre class="bg-slate-900 text-emerald-400 p-4 rounded-xl text-xs overflow-x-auto font-mono select-all">
+function doPost(e) {
+  try {
+    var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    var data = JSON.parse(e.postData.contents);
+    
+    // Auto Create Headers if empty
+    if (sheet.getLastRow() === 0) {
+      sheet.appendRow(["Timestamp", "Student Name", "Class", "School", "Score", "Total Questions", "Percentage", "XP", "Completed Activities", "Date"]);
+    }
+    
+    sheet.appendRow([
+      new Date(),
+      data.studentName,
+      data.className,
+      data.school || "-",
+      data.score,
+      data.totalQuestions,
+      data.percentage + "%",
+      data.xp,
+      data.completedActivities.join(", "),
+      data.date
+    ]);
+    
+    return ContentService.createTextOutput(JSON.stringify({"result":"success"}))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch(err) {
+    return ContentService.createTextOutput(JSON.stringify({"result":"error", "error": err.toString()}))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
+            </pre>
+
+            <div class="text-xs text-slate-600 space-y-1">
+                <p><b>Setup Steps:</b></p>
+                <ol class="list-decimal list-inside space-y-1 pl-2">
+                    <li>Open your Google Sheet &rarr; Click <b>Extensions</b> &rarr; <b>Apps Script</b>.</li>
+                    <li>Paste the code above into <code>Code.gs</code>.</li>
+                    <li>Click <b>Deploy</b> &rarr; <b>New deployment</b> &rarr; Select <b>Web App</b>.</li>
+                    <li>Set <i>"Who has access"</i> to <b>Anyone</b>.</li>
+                    <li>Copy the generated Web App URL into the <b>Teacher Configuration</b> settings in this web application.</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-20 right-5 bg-slate-900 text-white text-xs px-4 py-2.5 rounded-xl shadow-lg transform translate-y-10 opacity-0 transition-all pointer-events-none z-50 flex items-center gap-2">
+        <i class="fa-solid fa-circle-check text-emerald-400"></i> <span id="toast-message">Notification</span>
+    </div>
+
+    <script>
+        
+        // App State
+        let state = {
+            student: {
+                name: "Guest Student",
+                class: "9A",
+                xp: 0,
+                completed: [],
+                badges: [],
+                quizScore: null
+            },
+            teacherConfig: {
+                teacherName: "Guru Bahasa Inggris",
+                schoolName: "SMP Negeri Indonesia",
+                className: "IX",
+                scriptUrl: "",
+                docsUrl: "",
+                sheetsUrl: ""
+            },
+            currentVocabIndex: 0,
+            readingIndex: 'bekantan',
+            quizCurrentIndex: 0,
+            quizAnswers: {},
+            quizScore: 0
+        };
+
+        // Vocabulary Database
+        const vocabList = [
+            { term: "HABITAT", meaning: "Tempat hidup alami hewan", example: "Rainforest is an important habitat for orangutans.", audio: "Habitat" },
+            { term: "ENDANGERED", meaning: "Terancam punah", example: "Bekantans are endangered species in Borneo.", audio: "Endangered" },
+            { term: "PRIMATE", meaning: "Mamalia tingkat tinggi (kera, monyet)", example: "Orangutans are intelligent primates.", audio: "Primate" },
+            { term: "MANGROVE", meaning: "Hutan bakau", example: "Bekantans live near coastal mangrove forests.", audio: "Mangrove" },
+            { term: "CANOPY", meaning: "Kanopi / atap pohon hutan", example: "Birds fly high above the rainforest canopy.", audio: "Canopy" },
+            { term: "SPECIES", meaning: "Spesies / jenis makhluk hidup", example: "Indonesia has thousands of unique animal species.", audio: "Species" },
+            { term: "BEAK", meaning: "Paruh burung", example: "The hornbill has a massive yellow beak.", audio: "Beak" },
+            { term: "CONSERVATION", meaning: "Pelestarian / perlindungan alam", example: "Conservation projects protect wildlife.", audio: "Conservation" },
+            { term: "FEATHER", meaning: "Bulu burung", example: "Jalak Bali has beautiful white feathers.", audio: "Feather" },
+            { term: "ARBOREAL", meaning: "Biasa hidup di atas pohon", example: "Orangutans are arboreal mammals.", audio: "Arboreal" }
+        ];
+
+        // Reading Passages Database
+        const readingPassages = {
+            bekantan: {
+                title: "Proboscis Monkey (Bekantan)",
+                passage: `<p>The <b>Proboscis Monkey</b>, locally known as <i>Bekantan</i>, is an endemic primate native to the island of Borneo. It is easily recognized by its unusually large and pendulous nose, especially in adult males. The nose acts as a resonating chamber to amplify warning calls.</p><p>Bekantans have reddish-brown coats on their back and shoulders, with pale gray underparts. They live mainly in coastal mangrove forests, riverine habitats, and lowland swamps. Bekantans are remarkable swimmers equipped with webbed feet, allowing them to swim across wide rivers to evade predators such as crocodiles.</p>`,
+                questions: [
+                    {
+                        q: "What is the main physical feature of male Bekantans?",
+                        options: ["Long red tail", "Large pendulous nose", "Sharp yellow beak"],
+                        correct: 1,
+                        explanation: "Male Bekantans are famous for their large, long noses."
+                    },
+                    {
+                        q: "Where do Bekantans primarily live?",
+                        options: ["Dry desert dunes", "High alpine snow", "Coastal mangrove forests"],
+                        correct: 2,
+                        explanation: "Bekantans inhabit coastal mangrove swamps and lowland forests in Borneo."
+                    }
+                ]
+            },
+            orangutan: {
+                title: "Orangutan: The Great Ape",
+                passage: `<p><b>Orangutans</b> are great apes native to the tropical rainforests of Sumatra and Borneo. The word <i>orangutan</i> comes from the Malay words <i>'orang'</i> (person) and <i>'hutan'</i> (forest), meaning "person of the forest".</p><p>They are distinctive for their bright red-orange fur and long, powerful arms. Orangutans spend almost all their lives high up in tree canopies, making them the largest arboreal mammals on Earth. They feed on wild fruits, leaves, bark, and insects. Due to severe habitat loss from deforestation, orangutans are critically endangered.</p>`,
+                questions: [
+                    {
+                        q: "What does the word 'orangutan' mean?",
+                        options: ["King of birds", "Person of the forest", "Fast swimmer"],
+                        correct: 1,
+                        explanation: "Orangutan stems from Malay meaning 'person of the forest'."
+                    }
+                ]
+            },
+            birds: {
+                title: "Indonesian Avian Diversity",
+                passage: `<p>Indonesia boasts incredible avian diversity, hosting endemic birds like the <b>Bali Myna</b> (Jalak Bali) and the <b>Rhinoceros Hornbill</b>. Jalak Bali is famous for its snowy white plumage and vivid blue skin surrounding its eyes.</p><p>Meanwhile, the Rhinoceros Hornbill is celebrated for its huge curved bill topped with a prominent casque. These birds play vital ecological roles as seed dispersers across Indonesian rainforests.</p>`,
+                questions: [
+                    {
+                        q: "Which bird is known for its snowy white plumage and blue eye patch?",
+                        options: ["Jalak Bali", "Javan Hawk-Eagle", "Cenderawasih"],
+                        correct: 0,
+                        explanation: "Jalak Bali has pure white feathers and blue eye skin."
+                    }
+                ]
+            }
+        };
+
+        // 20 Questions Final Quiz Database
+        const finalQuizData = [
+            { q: "1. What is the scientific name of Bekantan?", opts: ["Pongo abelii", "Nasalis larvatus", "Leucopsar rothschildi", "Nisaetus bartelsi"], ans: 1, exp: "Nasalis larvatus is the scientific name for Bekantan." },
+            { q: "2. Which island is Bekantan endemic to?", opts: ["Java", "Sumatra", "Borneo", "Bali"], ans: 2, exp: "Bekantans are endemic to Borneo." },
+            { q: "3. What does the word 'Orangutan' mean?", opts: ["Red monkey", "Person of the forest", "Tree climber", "Jungle king"], ans: 1, exp: "'Orang' means person, and 'hutan' means forest." },
+            { q: "4. Orangutans spend most of their lives in trees. They are called ______ mammals.", opts: ["Aquatic", "Arboreal", "Subterranean", "Desert"], ans: 1, exp: "Arboreal means living in trees." },
+            { q: "5. Jalak Bali has distinct ______ plumage with blue eye patches.", opts: ["Black", "Red", "White", "Green"], ans: 2, exp: "Jalak Bali has white plumage." },
+            { q: "6. Grammar: 'Orangutans ______ (live) in tropical rainforests.'", opts: ["lives", "live", "living", "lived"], ans: 1, exp: "Plural subject 'Orangutans' takes base verb 'live'." },
+            { q: "7. Grammar: 'An orangutan ______ (have) red-orange fur.'", opts: ["has", "have", "having", "had"], ans: 0, exp: "Singular subject 'An orangutan' takes 'has'." },
+            { q: "8. Grammar: 'There ______ many endangered birds in Indonesia.'", opts: ["is", "are", "was", "be"], ans: 1, exp: "Plural noun 'birds' requires 'are'." },
+            { q: "9. Vocabulary: What is a 'habitat'?", opts: ["Animal food", "Natural home of organisms", "Animal skin", "Jungle path"], ans: 1, exp: "Habitat means the natural living environment." },
+            { q: "10. Vocabulary: 'Endangered' species means:", opts: ["Very common", "At risk of extinction", "Dangerous to humans", "Domesticated"], ans: 1, exp: "Endangered means at risk of disappearing completely." },
+            { q: "11. Which bird is the national symbol inspiration for Indonesia (Garuda)?", opts: ["Jalak Bali", "Javan Hawk-Eagle", "Hornbill", "Parrot"], ans: 1, exp: "Elang Jawa (Javan Hawk-Eagle) inspired Garuda." },
+            { q: "12. What physical feature helps Bekantans swim across rivers?", opts: ["Feathers", "Webbed feet", "Long beak", "Wings"], ans: 1, exp: "Bekantans have partially webbed feet and hands." },
+            { q: "13. What do orangutans primarily eat?", opts: ["Meat and fish", "Fruits, leaves, and bark", "Plankton", "Insects only"], ans: 1, exp: "Orangutans are mainly frugivorous." },
+            { q: "14. Grammar: Choose the correct adjective order: 'A ______ monkey.'", opts: ["large reddish-brown", "reddish-brown large", "monkey large", "large monkey brown"], ans: 0, exp: "Size comes before color: large reddish-brown." },
+            { q: "15. What is the main threat to Indonesian wildlife?", opts: ["Too many trees", "Habitat loss and deforestation", "Overfeeding", "Heavy rain"], ans: 1, exp: "Deforestation destroys natural animal habitats." },
+            { q: "16. Which bird species is famous for its elaborate courtship dancing in Papua?", opts: ["Bird-of-Paradise (Cenderawasih)", "Jalak Bali", "Owl", "Eagle"], ans: 0, exp: "Cenderawasih is world famous for courtship dances." },
+            { q: "17. Grammar: 'Bekantans eat mangrove shoots.' What is the verb?", opts: ["Bekantans", "eat", "mangrove", "shoots"], ans: 1, exp: "'eat' is the action verb." },
+            { q: "18. What structure is atop a Rhinoceros Hornbill's beak?", opts: ["Feather crest", "Casque", "Crown", "Horn"], ans: 1, exp: "It is called a casque." },
+            { q: "19. In descriptive texts, the first paragraph usually contains the:", opts: ["Conclusion", "Identification", "Resolution", "Complication"], ans: 1, exp: "Descriptive text starts with Identification." },
+            { q: "20. How can Grade 9 students help protect wildlife?", opts: ["Buy wild pets", "Promote forest conservation and environmental awareness", "Cut down mangrove trees", "Pollute rivers"], ans: 1, exp: "Spreading awareness and protecting forests preserves wildlife." }
+        ];
+
+        window.onload = function() {
+            loadStudentData();
+            loadTeacherConfig();
+            renderFlashcards();
+            switchReadingText('bekantan');
+            renderBadges();
+
+            if (!state.student.name || state.student.name === "Guest Student") {
+                document.getElementById('student-onboard-modal').classList.remove('hidden');
+            }
+        };
+
+        function navigateTo(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page-content').forEach(el => el.classList.add('hidden'));
+            
+            // Show selected page
+            const target = document.getElementById(`page-${pageId}`);
+            if (target) target.classList.remove('hidden');
+
+            // Update nav active states
+            document.querySelectorAll('.nav-link').forEach(btn => btn.classList.remove('active-tab'));
+            const activeBtn = document.getElementById(`nav-${pageId}`);
+            if (activeBtn) activeBtn.classList.add('active-tab');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function loadStudentData() {
+            const saved = localStorage.getItem('fauna_student_progress');
+            if (saved) {
+                try {
+                    state.student = JSON.parse(saved);
+                    updateUIProgress();
+                } catch(e){}
+            }
+        }
+
+        function saveStudentData() {
+            localStorage.setItem('fauna_student_progress', JSON.stringify(state.student));
+            updateUIProgress();
+        }
+
+        function submitStudentOnboard(e) {
+            e.preventDefault();
+            const name = document.getElementById('onboard-name').value.trim();
+            const cls = document.getElementById('onboard-class').value.trim();
+            if (name) {
+                state.student.name = name;
+                state.student.class = cls;
+                addXP(50); // Welcome bonus
+                saveStudentData();
+                document.getElementById('student-onboard-modal').classList.add('hidden');
+                showToast("Welcome aboard, " + name + "! +50 XP");
+            }
+        }
+
+        function updateUIProgress() {
+            document.getElementById('nav-student-name').innerText = state.student.name;
+            document.getElementById('user-xp-display').innerText = state.student.xp;
+            
+            document.getElementById('prog-xp').innerText = state.student.xp;
+            document.getElementById('prog-quiz').innerText = state.student.quizScore !== null ? state.student.quizScore + "/20" : "-";
+            document.getElementById('prog-badge-count').innerText = `${state.student.badges.length} / 7`;
+
+            document.getElementById('dash-student-name').innerText = `${state.student.name} (${state.student.class})`;
+            document.getElementById('dash-student-xp').innerText = state.student.xp;
+            document.getElementById('dash-student-quiz').innerText = state.student.quizScore !== null ? state.student.quizScore + "/20" : "-";
+        }
+
+        function addXP(amount) {
+            state.student.xp += amount;
+            saveStudentData();
+        }
+
+        function showHotspotInfo(part) {
+            const box = document.getElementById('orangutan-info-box');
+            const title = document.getElementById('hotspot-title');
+            const body = document.getElementById('hotspot-body');
+            const vocab = document.getElementById('hotspot-vocab');
+            const vocabText = document.getElementById('hotspot-vocab-text');
+            const sentence = document.getElementById('hotspot-sentence');
+            const sentenceText = document.getElementById('hotspot-sentence-text');
+
+            vocab.classList.remove('hidden');
+            sentence.classList.remove('hidden');
+
+            if (part === 'head') {
+                title.innerText = "1. Head & High Intelligence";
+                body.innerText = "Orangutans have large brains and display incredible problem-solving skills, such as using leaves as umbrellas and tools.";
+                vocabText.innerText = "Intelligent (adj), Brain (n), Tool (n)";
+                sentenceText.innerText = "The orangutan is an intelligent primate that uses tools in the forest.";
+            } else if (part === 'arms') {
+                title.innerText = "2. Long & Powerful Arms";
+                body.innerText = "An orangutan's arm span can reach up to 2.2 meters (7 feet), enabling them to swing effortlessly between canopy branches.";
+                vocabText.innerText = "Long arms, Swing (v), Canopy (n)";
+                sentenceText.innerText = "An orangutan has long, strong arms to swing from tree to tree.";
+            } else if (part === 'fur') {
+                title.innerText = "3. Reddish-Orange Fur";
+                body.innerText = "Their long red hair protects them from rain and sunlight while blending into the rainforest environment.";
+                vocabText.innerText = "Red-orange fur, Coat (n), Protection (n)";
+                sentenceText.innerText = "Orangutans are covered in thick red-orange fur.";
+            } else if (part === 'hands') {
+                title.innerText = "4. Flexible Hands & Feet";
+                body.innerText = "Their hands and feet have opposable thumbs and big toes, giving them a vice-like grip on branches.";
+                vocabText.innerText = "Grip (n/v), Opposable (adj), Flexible (adj)";
+                sentenceText.innerText = "They have strong flexible hands and feet for climbing.";
+            }
+            addXP(10);
+        }
+
+        function renderFlashcards() {
+            const card = vocabList[state.currentVocabIndex];
+            document.getElementById('vocab-card-num').innerText = `Card ${state.currentVocabIndex + 1} / ${vocabList.length}`;
+            document.getElementById('vocab-card-term').innerText = card.term;
+            document.getElementById('vocab-card-meaning').innerText = card.meaning;
+            document.getElementById('vocab-card-example').innerText = `"${card.example}"`;
+        }
+
+        function nextVocabCard() {
+            state.currentVocabIndex = (state.currentVocabIndex + 1) % vocabList.length;
+            renderFlashcards();
+            addXP(5);
+        }
+
+        function playVocabAudio() {
+            const term = vocabList[state.currentVocabIndex].audio;
+            speakText(term);
+        }
+
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const msg = new SpeechSynthesisUtterance(text);
+                msg.lang = 'en-US';
+                msg.rate = 0.9;
+                window.speechSynthesis.speak(msg);
+            } else {
+                showToast("Audio synthesis not supported on this browser.");
+            }
+        }
+
+        function switchReadingText(key) {
+            state.readingIndex = key;
+            const data = readingPassages[key];
+            document.getElementById('reading-title').innerText = data.title;
+            document.getElementById('reading-passage').innerHTML = data.passage;
+
+            const qContainer = document.getElementById('reading-questions-container');
+            qContainer.innerHTML = '';
+
+            data.questions.forEach((q, idx) => {
+                const div = document.createElement('div');
+                div.className = 'p-3 bg-slate-50 rounded-xl border space-y-2';
+                div.innerHTML = `
+                    <p class="font-semibold text-slate-800">${q.q}</p>
+                    <div class="space-y-1">
+                        ${q.options.map((opt, i) => `
+                            <button onclick="checkQuickAnswer(this, ${i === q.correct}, '${q.explanation}')" class="w-full text-left p-2 bg-white hover:bg-slate-100 rounded border text-xs">
+                                ${opt}
+                            </button>
+                        `).join('')}
+                    </div>
+                    <p class="quick-feedback text-xs font-semibold mt-1 hidden"></p>
+                `;
+                qContainer.appendChild(div);
+            });
+        }
+
+        function readAloudText() {
+            const data = readingPassages[state.readingIndex];
+            const cleanText = data.passage.replace(/<[^>]*>?/gm, '');
+            speakText(cleanText);
+        }
+
+        function checkGrammarDrill(btn, isCorrect, feedback) {
+            const parent = btn.closest('div');
+            const allBtns = parent.querySelectorAll('button');
+            allBtns.forEach(b => b.disabled = true);
+
+            if (isCorrect) {
+                btn.classList.add('bg-emerald-600', 'text-white');
+                showToast("Correct Grammar! +15 XP");
+                addXP(15);
+            } else {
+                btn.classList.add('bg-rose-600', 'text-white');
+                showToast("Review the grammar rule!");
+            }
+        }
+
+        function checkQuickAnswer(btn, isCorrect, explanation) {
+            const parent = btn.closest('div');
+            const feedbackEl = parent.querySelector('.quick-feedback') || parent.nextElementSibling;
+            
+            if (isCorrect) {
+                btn.classList.add('bg-emerald-100', 'border-emerald-500', 'text-emerald-900', 'font-bold');
+                if (feedbackEl) {
+                    feedbackEl.innerText = explanation;
+                    feedbackEl.className = "quick-feedback text-xs font-semibold mt-2 text-emerald-700 block";
+                }
+                addXP(10);
+            } else {
+                btn.classList.add('bg-rose-100', 'border-rose-500', 'text-rose-900');
+                if (feedbackEl) {
+                    feedbackEl.innerText = explanation;
+                    feedbackEl.className = "quick-feedback text-xs font-semibold mt-2 text-rose-600 block";
+                }
+            }
+        }
+
+        function playListeningAudio() {
+            speakText("The Rhinoceros Hornbill is a large bird found in Indonesian rainforests. It has black feathers, a downward bill, and a golden casque.");
+            showToast("Playing Audio Track...");
+        }
+
+        function startSpeechRecognition() {
+            const output = document.getElementById('speaking-output');
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+            if (!SpeechRecognition) {
+                output.innerText = "Speech Recognition API is not supported in this browser. Please read the prompt aloud for practice!";
+                return;
+            }
+
+            const rec = new SpeechRecognition();
+            rec.lang = 'en-US';
+            rec.interimResults = false;
+
+            output.innerText = "Listening... Speak now!";
+            rec.start();
+
+            rec.onresult = function(event) {
+                const transcript = event.results[0][0].transcript;
+                output.innerText = `You said: "${transcript}"`;
+                addXP(25);
+                showToast("Great speaking effort! +25 XP");
+            };
+
+            rec.onerror = function() {
+                output.innerText = "Could not catch your voice. Try speaking louder into your microphone!";
+            };
+        }
+
+        function generateParagraph(e) {
+            e.preventDefault();
+            const animal = document.getElementById('write-animal').value;
+            const habitat = document.getElementById('write-habitat').value;
+            const appearance = document.getElementById('write-appearance').value;
+            const diet = document.getElementById('write-diet').value;
+            const conservation = document.getElementById('write-conservation').value;
+
+            const text = `The <b>${animal}</b> is a unique Indonesian animal. It lives in ${habitat}. Physically, it has ${appearance}. In its natural habitat, it eats ${diet}. Protecting the ${animal} is crucial because ${conservation}.`;
+
+            document.getElementById('generated-paragraph-box').innerHTML = text;
+            addXP(30);
+            showToast("Paragraph generated! +30 XP");
+        }
+
+        function copyGeneratedParagraph() {
+            const box = document.getElementById('generated-paragraph-box');
+            const text = box.innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                showToast("Paragraph copied to clipboard!");
+            });
+        }
+
+        function loadGame(gameType) {
+            const container = document.getElementById('game-container');
+            if (gameType === 'scramble') {
+                container.innerHTML = `
+                    <div class="space-y-4 max-w-sm mx-auto text-center">
+                        <h3 class="font-bold text-sm text-slate-800">Word Scramble: Animal Vocabulary</h3>
+                        <p class="text-xs text-slate-500">Unscramble the target word:</p>
+                        <p class="text-2xl font-mono font-extrabold text-emerald-800 tracking-widest bg-emerald-100 p-3 rounded-xl">T A T I B A H</p>
+                        <input type="text" id="scramble-input" class="w-full p-2 bg-white border rounded-xl text-center text-xs" placeholder="Type answer...">
+                        <button onclick="checkScramble()" class="bg-emerald-700 text-white font-bold text-xs px-4 py-2 rounded-xl">Submit Word</button>
+                    </div>
+                `;
+            } else if (gameType === 'matching') {
+                container.innerHTML = `
+                    <div class="space-y-3 text-xs">
+                        <h3 class="font-bold text-sm text-slate-800 text-center">Match Animal to Feature</h3>
+                        <div class="p-3 bg-white rounded-xl border flex justify-between items-center">
+                            <span>Bekantan &rarr;</span>
+                            <button onclick="checkQuickAnswer(this, true, 'Correct! Long nose is Bekantans landmark feature.')" class="bg-slate-100 border px-3 py-1 rounded">Large Pendulous Nose</button>
+                        </div>
+                        <div class="p-3 bg-white rounded-xl border flex justify-between items-center">
+                            <span>Orangutan &rarr;</span>
+                            <button onclick="checkQuickAnswer(this, true, 'Correct! Long arms for swinging.')" class="bg-slate-100 border px-3 py-1 rounded">Long Red Arms</button>
+                        </div>
+                        <p class="quick-feedback text-xs font-semibold mt-2 hidden"></p>
+                    </div>
+                `;
+            } else if (gameType === 'whoami') {
+                container.innerHTML = `
+                    <div class="space-y-3 text-xs text-center max-w-md mx-auto">
+                        <h3 class="font-bold text-sm text-slate-800">Who Am I?</h3>
+                        <p class="p-3 bg-amber-50 border border-amber-200 rounded-xl italic text-amber-950">
+                            "I live in Borneo mangrove swamps, have reddish fur, and I am a great swimmer. Who am I?"
+                        </p>
+                        <div class="flex justify-center gap-2">
+                            <button onclick="checkQuickAnswer(this, true, 'Correct! You identified the Proboscis Monkey!')" class="bg-white border px-3 py-2 rounded-xl">Bekantan</button>
+                            <button onclick="checkQuickAnswer(this, false, 'Incorrect.')" class="bg-white border px-3 py-2 rounded-xl">Jalak Bali</button>
+                        </div>
+                        <p class="quick-feedback text-xs font-semibold mt-2 hidden"></p>
+                    </div>
+                `;
+            }
+        }
+
+        function checkScramble() {
+            const input = document.getElementById('scramble-input').value.trim().toUpperCase();
+            if (input === 'HABITAT') {
+                showToast("Awesome! HABITAT is correct! +20 XP");
+                addXP(20);
+            } else {
+                showToast("Try again!");
+            }
+        }
+
+        function startFinalQuiz() {
+            document.getElementById('quiz-start-screen').classList.add('hidden');
+            document.getElementById('quiz-body').classList.remove('hidden');
+            state.quizCurrentIndex = 0;
+            state.quizScore = 0;
+            renderQuizQuestion();
+        }
+
+        function renderQuizQuestion() {
+            const q = finalQuizData[state.quizCurrentIndex];
+            document.getElementById('quiz-progress-text').innerText = `Question ${state.quizCurrentIndex + 1} / ${finalQuizData.length}`;
+            document.getElementById('quiz-question-text').innerText = q.q;
+
+            const optsBox = document.getElementById('quiz-options-container');
+            optsBox.innerHTML = '';
+            document.getElementById('quiz-explanation-box').classList.add('hidden');
+            document.getElementById('quiz-next-btn').classList.add('hidden');
+
+            q.opts.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'w-full text-left p-3 bg-white hover:bg-slate-100 rounded-xl border transition text-xs font-medium';
+                btn.innerText = opt;
+                btn.onclick = function() { submitQuizAnswer(idx, btn); };
+                optsBox.appendChild(btn);
+            });
+        }
+
+        function submitQuizAnswer(selectedIdx, btnEl) {
+            const q = finalQuizData[state.quizCurrentIndex];
+            const optsBox = document.getElementById('quiz-options-container');
+            const allBtns = optsBox.querySelectorAll('button');
+            allBtns.forEach(b => b.disabled = true);
+
+            const expBox = document.getElementById('quiz-explanation-box');
+            expBox.classList.remove('hidden');
+            expBox.innerHTML = `<b>Explanation:</b> ${q.exp}`;
+
+            if (selectedIdx === q.ans) {
+                btnEl.classList.add('bg-emerald-100', 'border-emerald-500', 'text-emerald-900', 'font-bold');
+                state.quizScore++;
+            } else {
+                btnEl.classList.add('bg-rose-100', 'border-rose-500', 'text-rose-900');
+                allBtns[q.ans].classList.add('bg-emerald-50', 'border-emerald-300', 'text-emerald-800');
+            }
+
+            document.getElementById('quiz-next-btn').classList.remove('hidden');
+        }
+
+        function nextQuizQuestion() {
+            state.quizCurrentIndex++;
+            if (state.quizCurrentIndex < finalQuizData.length) {
+                renderQuizQuestion();
+            } else {
+                finishQuiz();
+            }
+        }
+
+        function finishQuiz() {
+            document.getElementById('quiz-body').classList.add('hidden');
+            document.getElementById('quiz-result-screen').classList.remove('hidden');
+
+            const total = finalQuizData.length;
+            const pct = Math.round((state.quizScore / total) * 100);
+            
+            state.student.quizScore = state.quizScore;
+            addXP(200);
+            saveStudentData();
+
+            document.getElementById('quiz-final-score').innerText = `${state.quizScore} / ${total}`;
+            document.getElementById('quiz-final-percentage').innerText = `(${pct}%)`;
+
+            let feedback = "";
+            if (pct >= 90) feedback = "Excellent! You are an Indonesian Wildlife Master Explorer! 🌟";
+            else if (pct >= 75) feedback = "Great job! Keep exploring fauna topics! 🐒";
+            else feedback = "Good effort! Review the lessons and try again. 💪";
+
+            document.getElementById('quiz-feedback-text').innerText = feedback;
+            
+            // Auto sync to Google Sheets if script URL present
+            sendDataToGoogleSheets();
+        }
+
+        function resetAndRestartQuiz() {
+            document.getElementById('quiz-result-screen').classList.add('hidden');
+            document.getElementById('quiz-start-screen').classList.remove('hidden');
+        }
+
+        const badgesList = [
+            { id: 'b1', name: 'Wildlife Beginner', icon: '🌱', desc: 'Started Grade 9 Fauna Explorer' },
+            { id: 'b2', name: 'Bekantan Explorer', icon: '🐒', desc: 'Explored Bekantan Subtopic' },
+            { id: 'b3', name: 'Orangutan Expert', icon: '🦧', desc: 'Completed Orangutan Hotspots' },
+            { id: 'b4', name: 'Bird Explorer', icon: '🐦', desc: 'Discovered Endemic Birds' },
+            { id: 'b5', name: 'Vocabulary Master', icon: '📚', desc: 'Reviewed Vocabulary Cards' },
+            { id: 'b6', name: 'Quiz Champion', icon: '🎯', desc: 'Completed Final Evaluative Quiz' },
+            { id: 'b7', name: 'Conservation Hero', icon: '🌳', desc: 'Completed Conservation Challenge' }
+        ];
+
+        function renderBadges() {
+            const container = document.getElementById('badges-grid');
+            container.innerHTML = '';
+
+            badgesList.forEach(b => {
+                const earned = state.student.xp >= 50; // Dynamic condition
+                const div = document.createElement('div');
+                div.className = `p-3 rounded-2xl border badge-card flex flex-col items-center text-center ${earned ? 'bg-amber-50 border-amber-200' : 'bg-slate-50 opacity-50 border-slate-200'}`;
+                div.innerHTML = `
+                    <div class="text-3xl mb-1">${b.icon}</div>
+                    <h4 class="font-bold text-xs text-slate-800">${b.name}</h4>
+                    <p class="text-[10px] text-slate-500 mt-0.5">${b.desc}</p>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function openConfigModal() {
+            document.getElementById('cfg-teacher-name').value = state.teacherConfig.teacherName;
+            document.getElementById('cfg-school-name').value = state.teacherConfig.schoolName;
+            document.getElementById('cfg-script-url').value = state.teacherConfig.scriptUrl;
+            document.getElementById('cfg-docs-url').value = state.teacherConfig.docsUrl;
+            document.getElementById('cfg-sheets-url').value = state.teacherConfig.sheetsUrl;
+            document.getElementById('config-modal').classList.remove('hidden');
+        }
+
+        function closeConfigModal() {
+            document.getElementById('config-modal').classList.add('hidden');
+        }
+
+        function saveTeacherConfig(e) {
+            e.preventDefault();
+            state.teacherConfig.teacherName = document.getElementById('cfg-teacher-name').value;
+            state.teacherConfig.schoolName = document.getElementById('cfg-school-name').value;
+            state.teacherConfig.scriptUrl = document.getElementById('cfg-script-url').value;
+            state.teacherConfig.docsUrl = document.getElementById('cfg-docs-url').value;
+            state.teacherConfig.sheetsUrl = document.getElementById('cfg-sheets-url').value;
+
+            localStorage.setItem('fauna_teacher_cfg', JSON.stringify(state.teacherConfig));
+            updateTeacherUI();
+            closeConfigModal();
+            showToast("Teacher config saved!");
+        }
+
+        function loadTeacherConfig() {
+            const saved = localStorage.getItem('fauna_teacher_cfg');
+            if (saved) {
+                try {
+                    state.teacherConfig = JSON.parse(saved);
+                    updateTeacherUI();
+                } catch(e){}
+            }
+        }
+
+        function updateTeacherUI() {
+            document.getElementById('dash-teacher-name').innerText = state.teacherConfig.teacherName || "Not Configured";
+            document.getElementById('dash-school-name').innerText = state.teacherConfig.schoolName || "Not Configured";
+            document.getElementById('dash-class-name').innerText = state.teacherConfig.className || "IX";
+
+            const docsBtnHome = document.getElementById('home-google-docs-btn');
+            if (state.teacherConfig.docsUrl) {
+                docsBtnHome.href = state.teacherConfig.docsUrl;
+                docsBtnHome.classList.remove('hidden');
+                document.getElementById('btn-open-docs').href = state.teacherConfig.docsUrl;
+            }
+
+            if (state.teacherConfig.sheetsUrl) {
+                document.getElementById('btn-open-sheets').href = state.teacherConfig.sheetsUrl;
+            }
+        }
+
+        function toggleScriptGuideModal() {
+            const modal = document.getElementById('script-guide-modal');
+            modal.classList.toggle('hidden');
+        }
+
+        function sendDataToGoogleSheets() {
+            if (!state.teacherConfig.scriptUrl) {
+                showToast("Local progress saved! Configure Google Script URL to auto-sync.");
+                return;
+            }
+
+            const payload = {
+                studentName: state.student.name,
+                className: state.student.class,
+                school: state.teacherConfig.schoolName,
+                score: state.student.quizScore || 0,
+                totalQuestions: 20,
+                percentage: Math.round(((state.student.quizScore || 0) / 20) * 100),
+                xp: state.student.xp,
+                completedActivities: ["Vocabulary", "Reading", "Grammar", "Quiz"],
+                date: new Date().toLocaleDateString()
+            };
+
+            fetch(state.teacherConfig.scriptUrl, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+            .then(() => {
+                showToast("Data synced to Google Sheets!");
+            })
+            .catch(() => {
+                showToast("Saved locally. Could not sync with Google Sheets.");
+            });
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-message').innerText = msg;
+            toast.classList.remove('translate-y-10', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-10', 'opacity-0');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
